@@ -12,3 +12,4 @@ dist
 checkpoints_test
 logs
 third_party
+.claude/settings.local.json

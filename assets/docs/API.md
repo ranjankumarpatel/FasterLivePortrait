@@ -1,5 +1,59 @@
 ## FasterLivePortrait API Usage Guide
 
+### Run with uv
+```shell
+uv sync
+uv run python api.py
+```
+
+The API listens on `http://127.0.0.1:9871` by default. Override with:
+
+```shell
+FLIP_IP=0.0.0.0 FLIP_PORT=9871 uv run python api.py
+```
+
+By default the HTTP server starts before loading the avatar engine, so `/healthz` responds quickly. The first render loads checkpoints and converts TensorRT models if needed. Set `FLIP_LOAD_ENGINE_ON_STARTUP=1` when you prefer old startup behavior.
+
+Use `/healthz` for process health and `/readyz` for engine readiness. `/readyz` returns `503` until the FasterLivePortrait engine is loaded.
+
+### Live Avatar Session API
+
+Open the browser test console:
+
+```text
+http://127.0.0.1:9871/
+```
+
+Create an avatar session from a source image:
+
+```shell
+curl -X POST http://127.0.0.1:9871/v1/avatar/sessions \
+  -F "source_image=@assets/examples/source/s10.jpg" \
+  -F "animal=false"
+```
+
+Render that avatar with driving video:
+
+```shell
+curl -X POST http://127.0.0.1:9871/v1/avatar/sessions/<session_id>/render \
+  -F "driving_video=@assets/examples/driving/d0.mp4" \
+  --output avatar-render.zip
+```
+
+For live frame streaming, connect a WebSocket and send JPEG-encoded driving frames as binary messages. The server returns JPEG-encoded rendered frames:
+
+```text
+ws://127.0.0.1:9871/v1/avatar/sessions/<session_id>/stream?output=org
+```
+
+`output=org` returns the pasted-back full frame. `output=crop` returns the cropped portrait frame.
+
+Delete a session:
+
+```shell
+curl -X DELETE http://127.0.0.1:9871/v1/avatar/sessions/<session_id>
+```
+
 ### Building the Image
 * Decide on an image name, for example `shaoguo/faster_liveportrait_api:v1.0`. Replace the `-t` parameter in the following command with your chosen name.
 * Run `docker build -t shaoguo/faster_liveportrait_api:v1.0 -f DockerfileAPI .`

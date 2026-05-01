@@ -1,0 +1,34 @@
+[project]
+name = "fasterliveportrait"
+version = "0.1.0"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "fastapi",
+    "ffmpeg-python>=0.2.0",
+    "gradio>=6.14.0",
+    "huggingface-hub>=1.13.0",
+    "insightface>=0.7.3",
+    "jinja2>=3.1.6",
+    "kokoro>=0.3.4",
+    "mediapipe>=0.10.35",
+    "misaki[ja,zh]>=0.9.4",
+    "munch>=4.0.0",
+    "numpy>=2.4.4",
+    "omegaconf>=2.3.0",
+    "onnx>=1.21.0",
+    "onnxruntime>=1.25.1",
+    "opencv-python>=4.13.0.92",
+    "phonemizer>=3.3.0",
+    "python-multipart",
+    "requests",
+    "scikit-image>=0.26.0",
+    "soundfile>=0.13.1",
+    "torchgeometry>=0.1.2",
+    "uvicorn",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.0.3",
+]

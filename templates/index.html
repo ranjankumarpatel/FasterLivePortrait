@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">FasterLivePortrait</p>
+        <h1>Live Avatar Console</h1>
+      </div>
+      <div class="status-row">
+        <span id="healthBadge" class="badge">health: unknown</span>
+        <span id="readyBadge" class="badge">engine: unknown</span>
+      </div>
+    </header>
+
+    <section class="grid">
+      <form id="sessionForm" class="panel">
+        <h2>1. Source</h2>
+        <label>
+          Avatar image
+          <input id="sourceImage" name="source_image" type="file" accept="image/*" required>
+        </label>
+        <label class="checkline">
+          <input id="animalMode" name="animal" type="checkbox">
+          Animal model
+        </label>
+        <button type="submit">Create session</button>
+        <output id="sessionOutput" class="output">No session yet.</output>
+      </form>
+
+      <form id="renderForm" class="panel">
+        <h2>2. Batch Render</h2>
+        <label>
+          Driving video
+          <input id="drivingVideo" name="driving_video" type="file" accept="video/*">
+        </label>
+        <label>
+          Driving pickle
+          <input id="drivingPickle" name="driving_pickle" type="file" accept=".pkl">
+        </label>
+        <button type="submit">Render zip</button>
+        <output id="renderOutput" class="output">Create a session first.</output>
+      </form>
+
+      <section class="panel stream-panel">
+        <h2>3. Live Stream</h2>
+        <div class="video-grid">
+          <video id="cameraPreview" autoplay playsinline muted></video>
+          <img id="avatarPreview" alt="Rendered avatar preview">
+        </div>
+        <div class="button-row">
+          <button id="startCamera" type="button">Start camera</button>
+          <button id="startStream" type="button">Start stream</button>
+          <button id="stopStream" type="button">Stop</button>
+        </div>
+        <output id="streamOutput" class="output">WebSocket: idle.</output>
+      </section>
+    </section>
+
+    <section class="panel endpoints">
+      <h2>Endpoints</h2>
+      <code>POST /v1/avatar/sessions</code>
+      <code>POST /v1/avatar/sessions/{id}/render</code>
+      <code>WS /v1/avatar/sessions/{id}/stream?output=org</code>
+    </section>
+  </main>
+  <script>
+    window.LIVE_AVATAR_CONFIG = { apiBase: "{{ api_base }}" };
+  </script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
